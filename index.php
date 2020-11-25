@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Job;
 require("jobs.php");
+
 $name = 'RetaxMaster';
 $limitMonths = 2000;
 
