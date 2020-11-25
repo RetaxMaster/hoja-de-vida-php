@@ -1,8 +1,12 @@
 <?php
 
+use App\Models\{ Job, Project, Printable };
+
 require("app/Models/Printable.php");
 require("app/Models/Job.php");
 require("app/Models/Project.php");
+
+require("lib1/Project.php");
 
 $job1 = new Job('PHP Developer', 'This is an awesome job!!!');
 $job1->months = 16;
@@ -18,6 +22,8 @@ $jobs = [$job1, $job2, $job3];
 $project1 = new Project("Project 1", "Descripción");
 
 $projects = [$project1];
+
+$projectLib = new Lib1\Project;
   
 function printElement(Printable $job) {
     if($job->visible == false) {
