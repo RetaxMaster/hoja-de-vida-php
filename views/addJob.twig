@@ -4,13 +4,19 @@
 
 <h1>Add Job</h1>
 
-<form action="/hoja-de-vida-php/jobs/add" method="post">
+<form action="/hoja-de-vida-php/jobs/add" method="post" enctype="multipart/form-data">
+
+    <div class="alert alert-primary" role="alert">
+        {{ responseMessage }}
+    </div>
 
     <label for="">Title:</label>
     <input name="title" type="text"><br>
 
     <label for="">Description:</label>
     <input name="description" type="text"><br>
+
+    <input type="file" name="logo"><br>
 
     <button type="submit">Save</button>
 
