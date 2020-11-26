@@ -7,6 +7,8 @@ error_reporting(E_ALL);
 
 require("../vendor/autoload.php");
 
+session_start();
+
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
 
@@ -78,6 +80,18 @@ $map->post('auth', '/hoja-de-vida-php/auth', [
     'action' => 'postLogin'
 ]);
 
+$map->get('admin', '/hoja-de-vida-php/admin', [
+    'controller' => 'App\Controllers\AdminController',
+    'action' => 'getIndex',
+    "auth" => true
+]);
+
+$map->get('logout', '/hoja-de-vida-php/logout', [
+    'controller' => 'App\Controllers\AuthController',
+    'action' => 'getLogout',
+    "auth" => true
+]);
+
 $matcher = $routerContainer->getMatcher();
 $route = $matcher->match($request);
 
@@ -89,6 +103,14 @@ else {
     $handlerData = $route->handler;
     $constrollerName = $handlerData["controller"];
     $actionName = $handlerData["action"];
+    $needsAuth = $handlerData["auth"] ?? false;
+
+    $sessionUserId = $_SESSION["userId"] ?? null;
+    if($needsAuth && !$sessionUserId) {
+        header("location: /hoja-de-vida-php/login");
+        die();
+    }
+    
 
     $controller = new $constrollerName;
     $response = $controller->$actionName($request);
