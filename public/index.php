@@ -58,6 +58,15 @@ $map->post('saveJobs', '/hoja-de-vida-php/jobs/add', [
     "action" => "getAddJobAction"
 ]);
 
+$map->get('addUser', '/hoja-de-vida-php/users/add', [
+    'controller' => 'App\Controllers\UsersController',
+    'action' => 'getAddUser'
+]);
+$map->post('saveUser', '/hoja-de-vida-php/users/save', [
+    'controller' => 'App\Controllers\UsersController',
+    'action' => 'postSaveUser'
+]);
+
 $matcher = $routerContainer->getMatcher();
 $route = $matcher->match($request);
 
