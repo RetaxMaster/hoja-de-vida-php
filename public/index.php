@@ -62,9 +62,20 @@ $map->get('addUser', '/hoja-de-vida-php/users/add', [
     'controller' => 'App\Controllers\UsersController',
     'action' => 'getAddUser'
 ]);
+
 $map->post('saveUser', '/hoja-de-vida-php/users/save', [
     'controller' => 'App\Controllers\UsersController',
     'action' => 'postSaveUser'
+]);
+
+$map->get('loginForm', '/hoja-de-vida-php/login', [
+    'controller' => 'App\Controllers\AuthController',
+    'action' => 'getLogin'
+]);
+
+$map->post('auth', '/hoja-de-vida-php/auth', [
+    'controller' => 'App\Controllers\AuthController',
+    'action' => 'postLogin'
 ]);
 
 $matcher = $routerContainer->getMatcher();
