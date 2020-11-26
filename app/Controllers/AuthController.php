@@ -2,7 +2,9 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Redirect;
 use Respect\Validation\Validator as v;
+use Zend\Diactoros\Response\RedirectResponse;
 
 class AuthController extends BaseController {
 
@@ -18,20 +20,20 @@ class AuthController extends BaseController {
         if($user) {
 
             if (password_verify($postData["password"], $user->password)) {
-
-                echo "right";
-
+                return new RedirectResponse("/hoja-de-vida-php/admin");
             }
             else {
-                echo "Wrong";
+                $responseMessage = "Bad credentials";
             }
             
         }
         else {
 
-            echo "Not found";
+            $responseMessage = "Bad credentials";
 
         }
+
+        return $this->renderHTML("login.twig", compact("responseMessage"));
 
         
     }
