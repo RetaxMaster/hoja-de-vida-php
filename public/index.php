@@ -43,12 +43,17 @@ $routerContainer = new RouterContainer();
 $map = $routerContainer->getMap();
 
 // El router nos regresa lo que nosotros le dijimos que regresara cuando haga match con cierta ruta, en este caso regresa el arreglo con controller y action... si, puede regresar tambien una cadena del tipo IndexController@indexAction como Laravel...
-$map->get('index', '/curso-php-introduccion-avanzado/', [
+$map->get('index', '/hoja-de-vida-php/', [
     "controller" => "App\Controllers\IndexController",
     "action" => "indexAction"
 ]);
 
-$map->get('addJobs', '/curso-php-introduccion-avanzado/jobs/add', [
+$map->get('addJobs', '/hoja-de-vida-php/jobs/add', [
+    "controller" => "App\Controllers\JobsController",
+    "action" => "getAddJobAction"
+]);
+
+$map->post('saveJobs', '/hoja-de-vida-php/jobs/add', [
     "controller" => "App\Controllers\JobsController",
     "action" => "getAddJobAction"
 ]);
@@ -84,7 +89,9 @@ else {
     $actionName = $handlerData["action"];
 
     $controller = new $constrollerName;
-    $controller->$actionName();
+    $controller->$actionName($request);
+
+    // El request es el que maneja Zend:D!
 
 }
 

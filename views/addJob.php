@@ -13,7 +13,7 @@
 
     <h1>Add Job</h1>
 
-    <form action="" method="post">
+    <form action="/hoja-de-vida-php/jobs/add" method="post">
     
         <label for="">Title:</label>
         <input name="title" type="text"><br>
