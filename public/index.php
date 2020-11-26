@@ -73,6 +73,8 @@ else {
     $controller = new $constrollerName;
     $response = $controller->$actionName($request);
 
+    echo $response->getBody();
+
     // El request es el que maneja Zend:D!
     // El response viene desde BaseController en Twig, que igual es manejado por Zend
 

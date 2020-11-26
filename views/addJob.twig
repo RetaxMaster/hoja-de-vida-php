@@ -1,29 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <title>Add Job</title>
-</head>
-<body>
+{% extends "layout.twig" %}
 
-    <h1>Add Job</h1>
+{% block content %}
 
-    <form action="/hoja-de-vida-php/jobs/add" method="post">
-    
-        <label for="">Title:</label>
-        <input name="title" type="text"><br>
+<h1>Add Job</h1>
 
-        <label for="">Description:</label>
-        <input name="description" type="text"><br>
+<form action="/hoja-de-vida-php/jobs/add" method="post">
 
-        <button type="submit">Save</button>
+    <label for="">Title:</label>
+    <input name="title" type="text"><br>
 
-    </form>
-    
-</body>
-</html>
+    <label for="">Description:</label>
+    <input name="description" type="text"><br>
+
+    <button type="submit">Save</button>
+
+</form>
+
+{% endblock %}
