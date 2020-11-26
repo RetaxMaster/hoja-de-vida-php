@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Job;
 
-class JobsController {
+class JobsController extends BaseController {
 
     // El request viene desde nuestro FrontController public/index.php
     public function getAddJobAction($request) {
@@ -19,7 +19,7 @@ class JobsController {
 
         }
 
-        include("../views/addJob.php");
+        echo $this->renderHTML("addJob.twig");
 
     }
 
