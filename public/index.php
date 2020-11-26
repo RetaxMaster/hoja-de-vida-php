@@ -9,6 +9,9 @@ require("../vendor/autoload.php");
 
 session_start();
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/..");
+$dotenv->load();
+
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
 
@@ -16,10 +19,10 @@ $capsule = new Capsule;
 
 $capsule->addConnection([
     'driver'    => 'mysql',
-    'host'      => 'localhost',
-    'database'  => 'cursophp',
-    'username'  => 'retaxmaster',
-    'password'  => '123',
+    'host'      => $_ENV["DB_HOST"],
+    'database'  => $_ENV["DB_NAME"],
+    'username'  => $_ENV["DB_USER"],
+    'password'  => $_ENV["DB_PASS"],
     'charset'   => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix'    => '',
