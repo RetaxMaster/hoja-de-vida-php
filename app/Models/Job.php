@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasDefaultImage;
 use  Illuminate\Database\Eloquent\Model;
 
 class Job extends Model {
 
+    use HasDefaultImage;
+
     protected $table = "jobs";
-    protected $visible = 0;
-    protected $months = 0;
 
     public function getDurationAsString() {
         $years = floor($this->months / 12);

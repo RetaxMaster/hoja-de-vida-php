@@ -12,8 +12,13 @@ class IndexController extends BaseController {
         $project1 = new Project("Project 1", "Descripción");
         $projects = [$project1];
 
+        // Filtro los trabajos con mas de 15 meses
+        $limitMonths = 15;
+        /* $jobs = array_filter($jobs->toArray(), function($job) use ($limitMonths) {
+            return $job["months"] >= $limitMonths;
+        }); */
+
         $name = 'RetaxMaster';
-        $limitMonths = 2000;
 
         return $this->renderHTML("index.twig", compact("name", "jobs"));
 

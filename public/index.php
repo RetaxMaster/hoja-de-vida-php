@@ -53,9 +53,19 @@ $map->get('index', '/hoja-de-vida-php/', [
     "action" => "indexAction"
 ]);
 
+$map->get('indexJobs', '/hoja-de-vida-php/jobs', [
+    "controller" => "App\Controllers\JobsController",
+    "action" => "indexAction"
+]);
+
 $map->get('addJobs', '/hoja-de-vida-php/jobs/add', [
     "controller" => "App\Controllers\JobsController",
     "action" => "getAddJobAction"
+]);
+
+$map->get('deleteJobs', '/hoja-de-vida-php/jobs/delete', [
+    "controller" => "App\Controllers\JobsController",
+    "action" => "deleteAction"
 ]);
 
 $map->post('saveJobs', '/hoja-de-vida-php/jobs/add', [
