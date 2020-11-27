@@ -10,6 +10,7 @@
         "aura/router": "^3.1",
         "twig/twig": "^3.1",
         "respect/validation": "^2.1",
-        "vlucas/phpdotenv": "^5.2"
+        "vlucas/phpdotenv": "^5.2",
+        "php-di/php-di": "^6.3"
     }
 }

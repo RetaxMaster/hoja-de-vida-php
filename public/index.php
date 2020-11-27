@@ -15,6 +15,7 @@ $dotenv->load();
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
 
+$container = new DI\Container();
 $capsule = new Capsule;
 
 $capsule->addConnection([
@@ -114,7 +115,7 @@ if(!$route) {
 else {
 
     $handlerData = $route->handler;
-    $constrollerName = $handlerData["controller"];
+    $controllerName = $handlerData["controller"];
     $actionName = $handlerData["action"];
     $needsAuth = $handlerData["auth"] ?? false;
 
@@ -124,8 +125,8 @@ else {
         die();
     }
     
-
-    $controller = new $constrollerName;
+    // $controllerName tiene la ruta(namespace) completo de nuestra clase (App\Controllers\JobController por ejemplo), entonces PHP-DI mediante el método get de su container se encargará de ver qué cosa es lo que el constructor necesita y se lo inyectará
+    $controller = $container->get($controllerName);
     $response = $controller->$actionName($request);
 
     foreach ($response->getHeaders() as $name => $values) {
