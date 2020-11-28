@@ -55,59 +55,59 @@ $map = $routerContainer->getMap();
 
 // El router nos regresa lo que nosotros le dijimos que regresara cuando haga match con cierta ruta, en este caso regresa el arreglo con controller y action... si, puede regresar tambien una cadena del tipo IndexController@indexAction como Laravel...
 $map->get('index', '/hoja-de-vida-php/', [
-    "controller" => "App\Controllers\IndexController",
-    "action" => "indexAction"
+    "App\Controllers\IndexController",
+    "indexAction"
 ]);
 
 $map->get('indexJobs', '/hoja-de-vida-php/jobs', [
-    "controller" => "App\Controllers\JobsController",
-    "action" => "indexAction"
+    "App\Controllers\JobsController",
+    "indexAction"
 ]);
 
 $map->get('addJobs', '/hoja-de-vida-php/jobs/add', [
-    "controller" => "App\Controllers\JobsController",
-    "action" => "getAddJobAction"
+    "App\Controllers\JobsController",
+    "getAddJobAction"
 ]);
 
 $map->get('deleteJobs', '/hoja-de-vida-php/jobs/delete', [
-    "controller" => "App\Controllers\JobsController",
-    "action" => "deleteAction"
+    "App\Controllers\JobsController",
+    "deleteAction"
 ]);
 
 $map->post('saveJobs', '/hoja-de-vida-php/jobs/add', [
-    "controller" => "App\Controllers\JobsController",
-    "action" => "getAddJobAction"
+    "App\Controllers\JobsController",
+    "getAddJobAction"
 ]);
 
 $map->get('addUser', '/hoja-de-vida-php/users/add', [
-    'controller' => 'App\Controllers\UsersController',
-    'action' => 'getAddUser'
+    'App\Controllers\UsersController',
+    'getAddUser'
 ]);
 
 $map->post('saveUser', '/hoja-de-vida-php/users/save', [
-    'controller' => 'App\Controllers\UsersController',
-    'action' => 'postSaveUser'
+    'App\Controllers\UsersController',
+    'postSaveUser'
 ]);
 
 $map->get('loginForm', '/hoja-de-vida-php/login', [
-    'controller' => 'App\Controllers\AuthController',
-    'action' => 'getLogin'
+    'App\Controllers\AuthController',
+    'getLogin'
 ]);
 
 $map->post('auth', '/hoja-de-vida-php/auth', [
-    'controller' => 'App\Controllers\AuthController',
-    'action' => 'postLogin'
+    'App\Controllers\AuthController',
+    'postLogin'
 ]);
 
 $map->get('admin', '/hoja-de-vida-php/admin', [
-    'controller' => 'App\Controllers\AdminController',
-    'action' => 'getIndex',
+    'App\Controllers\AdminController',
+    'getIndex',
     "auth" => true
 ]);
 
 $map->get('logout', '/hoja-de-vida-php/logout', [
-    'controller' => 'App\Controllers\AuthController',
-    'action' => 'getLogout',
+    'App\Controllers\AuthController',
+    'getLogout',
     "auth" => true
 ]);
 
@@ -120,8 +120,8 @@ if(!$route) {
 else {
 
     $handlerData = $route->handler;
-    $controllerName = $handlerData["controller"];
-    $actionName = $handlerData["action"];
+    /* $controllerName = $handlerData["controller"];
+    $actionName = $handlerData["action"]; */
     $needsAuth = $handlerData["auth"] ?? false;
 
     $sessionUserId = $_SESSION["userId"] ?? null;
@@ -154,7 +154,8 @@ else {
     $harmony
         ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
         ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
-        ->addMiddleware(new DispatcherMiddleware())
+        // Podemos pasarle un contenedor de inyección de dependencias compatible y el nombre del action, en este caso, Laminas lo llama request.handler
+        ->addMiddleware(new DispatcherMiddleware($container, "request-handler"))
         ->run();
 
 
