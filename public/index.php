@@ -1,16 +1,18 @@
 <?php
 
-// Inicializamos los errores
-ini_set("display_errors", 1);
-ini_set("display_startup_error", 1);
-error_reporting(E_ALL);
-
 require("../vendor/autoload.php");
 
 session_start();
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/..");
 $dotenv->load();
+
+if ($_ENV["DEBUG"] === "true") {
+    // Inicializamos los errores
+    ini_set("display_errors", 1);
+    ini_set("display_startup_error", 1);
+    error_reporting(E_ALL);
+}
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
@@ -130,9 +132,12 @@ else {
         // Aquí empieza la parte de Harmony:D!
         $harmony = new Harmony($request, new Response());
         $harmony
-            ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
-            ->addMiddleware(new Franzl\Middleware\Whoops\WhoopsMiddleware())
-            ->addMiddleware(new \App\Middlewares\AuthenticationMiddleware())
+            ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()));
+
+        if($_ENV["DEBUG"] === "true")
+            $harmony->addMiddleware(new Franzl\Middleware\Whoops\WhoopsMiddleware());
+
+        $harmony->addMiddleware(new \App\Middlewares\AuthenticationMiddleware())
             ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
             // Podemos pasarle un contenedor de inyección de dependencias compatible y el nombre del action, en este caso, Laminas lo llama request-handler
             ->addMiddleware(new DispatcherMiddleware($container, "request-handler"))
@@ -140,6 +145,7 @@ else {
 
     } catch (\Exception $th) {
 
+        $log->error("This job was not found");
         $emitter = new SapiEmitter();
         $emitter->emit(new EmptyResponse(400));
 
