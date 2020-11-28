@@ -20,6 +20,11 @@ use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use WoohooLabs\Harmony\Harmony;
 use WoohooLabs\Harmony\Middleware\DispatcherMiddleware;
 use WoohooLabs\Harmony\Middleware\LaminasEmitterMiddleware;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+$log = new Logger('app');
+$log->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', Logger::WARNING));
 
 $container = new DI\Container();
 $capsule = new Capsule;
