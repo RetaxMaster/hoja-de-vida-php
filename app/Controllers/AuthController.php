@@ -3,9 +3,9 @@ namespace App\Controllers;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
+use Laminas\Diactoros\Response\RedirectResponse;
+use Laminas\Diactoros\ServerRequest;
 use Respect\Validation\Validator as v;
-use Zend\Diactoros\Response\RedirectResponse;
-use Zend\Diactoros\ServerRequest;
 
 class AuthController extends BaseController {
 

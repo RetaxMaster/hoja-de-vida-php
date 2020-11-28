@@ -14,6 +14,11 @@ $dotenv->load();
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
+use Laminas\Diactoros\Response;
+use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use WoohooLabs\Harmony\Harmony;
+use WoohooLabs\Harmony\Middleware\DispatcherMiddleware;
+use WoohooLabs\Harmony\Middleware\LaminasEmitterMiddleware;
 
 $container = new DI\Container();
 $capsule = new Capsule;
@@ -36,7 +41,7 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
 // Se encargará manejar los request, cumple con psr-7
-$request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
+$request = Laminas\Diactoros\ServerRequestFactory::fromGlobals(
     $_SERVER,
     $_GET,
     $_POST,
@@ -126,7 +131,7 @@ else {
     }
     
     // $controllerName tiene la ruta(namespace) completo de nuestra clase (App\Controllers\JobController por ejemplo), entonces PHP-DI mediante el método get de su container se encargará de ver qué cosa es lo que el constructor necesita y se lo inyectará
-    $controller = $container->get($controllerName);
+    /* $controller = $container->get($controllerName);
     $response = $controller->$actionName($request);
 
     foreach ($response->getHeaders() as $name => $values) {
@@ -138,10 +143,20 @@ else {
     }
 
     http_response_code($response->getStatusCode());
-    echo $response->getBody();
+    echo $response->getBody(); */
 
-    // El request es el que maneja Zend:D!
-    // El response viene desde BaseController en Twig, que igual es manejado por Zend
+    // El request es el que maneja Laminas:D!
+    // El response viene desde BaseController en Twig, que igual es manejado por Laminas
+
+    // Aquí empieza la parte de Harmony:D!
+
+    $harmony = new Harmony($request, new Response());
+    $harmony
+        ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
+        ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
+        ->addMiddleware(new DispatcherMiddleware())
+        ->run();
+
 
 }
 
