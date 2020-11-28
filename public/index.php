@@ -126,6 +126,7 @@ else {
         $harmony = new Harmony($request, new Response());
         $harmony
             ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
+            ->addMiddleware(new Franzl\Middleware\Whoops\WhoopsMiddleware())
             ->addMiddleware(new \App\Middlewares\AuthenticationMiddleware())
             ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
             // Podemos pasarle un contenedor de inyección de dependencias compatible y el nombre del action, en este caso, Laminas lo llama request-handler
