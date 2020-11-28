@@ -1,0 +1,28 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col">
+
+            <h1>Contact me!</h1>
+
+            <form action="/hoja-de-vida-php/contact/send" method="post">
+
+                <label for="">Name:</label>
+                <input name="name" type="text"><br>
+
+                <label for="">Email:</label>
+                <input name="email" type="text"><br>
+
+                <label for="">Message:</label>
+                <input name="message" type="text"><br>
+
+                <button type="submit">Save</button>
+
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %} 

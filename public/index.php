@@ -109,14 +109,22 @@ $map->post('auth', '/hoja-de-vida-php/auth', [
 
 $map->get('admin', '/hoja-de-vida-php/admin', [
     'App\Controllers\AdminController',
-    'getIndex',
-    "auth" => true
+    'getIndex'
 ]);
 
 $map->get('logout', '/hoja-de-vida-php/logout', [
     'App\Controllers\AuthController',
-    'getLogout',
-    "auth" => true
+    'getLogout'
+]);
+
+$map->get('contactForm', '/hoja-de-vida-php/contact', [
+    'App\Controllers\ContactController',
+    'index'
+]);
+
+$map->post('contactSend', '/hoja-de-vida-php/contact/send', [
+    'App\Controllers\ContactController',
+    'send'
 ]);
 
 $matcher = $routerContainer->getMatcher();
