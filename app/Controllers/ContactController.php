@@ -2,11 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\Message;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Diactoros\ServerRequest;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
 
 class ContactController extends BaseController {
     
@@ -20,22 +18,13 @@ class ContactController extends BaseController {
 
         $requestData = $request->getParsedBody();
 
-        // Create the Transport
-        $transport = (new Swift_SmtpTransport($_ENV["SMTP_HOST"], $_ENV["SMTP_PORT"]))
-        ->setUsername($_ENV["SMTP_USER"])
-        ->setPassword($_ENV["SMTP_PASSWORD"]);
+        $message = new Message();
+        $message->name = $requestData['name'];
+        $message->email = $requestData['email'];
+        $message->message = $requestData['message'];
+        $message->sent = false;
+        $message->save();
 
-        // Create the Mailer using your created Transport
-        $mailer = new Swift_Mailer($transport);
-
-        // Create a message
-        $message = (new Swift_Message('Wonderful Subject'))
-        ->setFrom(['john@doe.com' => 'John Doe'])
-        ->setTo(['receiver@domain.org', 'other@domain.org' => 'A name'])
-        ->setBody("Hi, you have a new message. Name: {$requestData['name']} Email: {$requestData['email']} Message: {$requestData['message']}");
-
-        // Send the message
-        $result = $mailer->send($message);
         return new RedirectResponse("/hoja-de-vida-php/contact");
 
     }
