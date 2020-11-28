@@ -15,6 +15,7 @@ $dotenv->load();
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
 use Laminas\Diactoros\Response;
+use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use WoohooLabs\Harmony\Harmony;
 use WoohooLabs\Harmony\Middleware\DispatcherMiddleware;
@@ -119,38 +120,31 @@ if(!$route) {
 }
 else {
 
-    $handlerData = $route->handler;
-    /* $controllerName = $handlerData["controller"];
-    $actionName = $handlerData["action"]; */ 
-    
-    // $controllerName tiene la ruta(namespace) completo de nuestra clase (App\Controllers\JobController por ejemplo), entonces PHP-DI mediante el método get de su container se encargará de ver qué cosa es lo que el constructor necesita y se lo inyectará
-    /* $controller = $container->get($controllerName);
-    $response = $controller->$actionName($request);
+    try {
 
-    foreach ($response->getHeaders() as $name => $values) {
+        // Aquí empieza la parte de Harmony:D!
+        $harmony = new Harmony($request, new Response());
+        $harmony
+            ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
+            ->addMiddleware(new \App\Middlewares\AuthenticationMiddleware())
+            ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
+            // Podemos pasarle un contenedor de inyección de dependencias compatible y el nombre del action, en este caso, Laminas lo llama request-handler
+            ->addMiddleware(new DispatcherMiddleware($container, "request-handler"))
+            ->run();
 
-        foreach ($values as $value) {
-            header(sprintf("%s: %s", $name, $value), false);
-        }
+    } catch (\Exception $th) {
+
+        $emitter = new SapiEmitter();
+        $emitter->emit(new EmptyResponse(400));
+
+    } catch(Error $e) { // Antes de PHP 7 no se podían cachar los errores
+
+        $emitter = new SapiEmitter();
+        $emitter->emit(new EmptyResponse(500));
 
     }
 
-    http_response_code($response->getStatusCode());
-    echo $response->getBody(); */
-
-    // El request es el que maneja Laminas:D!
-    // El response viene desde BaseController en Twig, que igual es manejado por Laminas
-
-    // Aquí empieza la parte de Harmony:D!
-
-    $harmony = new Harmony($request, new Response());
-    $harmony
-        ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
-        ->addMiddleware(new \App\Middlewares\AuthenticationMiddleware())
-        ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
-        // Podemos pasarle un contenedor de inyección de dependencias compatible y el nombre del action, en este caso, Laminas lo llama request-handler
-        ->addMiddleware(new DispatcherMiddleware($container, "request-handler"))
-        ->run();
+    // Exception y Error funcionan porque están usando la interfaz Throwable, interfaz que nosotros NO deberíamos implementar, en su lugar deberíamos heredar de Exception
 
 
 }

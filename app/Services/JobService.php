@@ -7,7 +7,11 @@ class JobService {
 
     public function deleteJob($id) {
 
-        $job = Job::find($id);
+        $job = Job::findOrFail($id);
+
+        /* if (!$job)
+            throw new \Exception("Job not found"); */
+
         $job->delete();
         
     }
