@@ -121,14 +121,7 @@ else {
 
     $handlerData = $route->handler;
     /* $controllerName = $handlerData["controller"];
-    $actionName = $handlerData["action"]; */
-    $needsAuth = $handlerData["auth"] ?? false;
-
-    $sessionUserId = $_SESSION["userId"] ?? null;
-    if($needsAuth && !$sessionUserId) {
-        header("location: /hoja-de-vida-php/login");
-        die();
-    }
+    $actionName = $handlerData["action"]; */ 
     
     // $controllerName tiene la ruta(namespace) completo de nuestra clase (App\Controllers\JobController por ejemplo), entonces PHP-DI mediante el método get de su container se encargará de ver qué cosa es lo que el constructor necesita y se lo inyectará
     /* $controller = $container->get($controllerName);
@@ -153,8 +146,9 @@ else {
     $harmony = new Harmony($request, new Response());
     $harmony
         ->addMiddleware(new LaminasEmitterMiddleware(new SapiEmitter()))
+        ->addMiddleware(new \App\Middlewares\AuthenticationMiddleware())
         ->addMiddleware(new Middlewares\AuraRouter($routerContainer))
-        // Podemos pasarle un contenedor de inyección de dependencias compatible y el nombre del action, en este caso, Laminas lo llama request.handler
+        // Podemos pasarle un contenedor de inyección de dependencias compatible y el nombre del action, en este caso, Laminas lo llama request-handler
         ->addMiddleware(new DispatcherMiddleware($container, "request-handler"))
         ->run();
 
